@@ -94,6 +94,7 @@
       display: none;
     }
   </style>
+  <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script>
 </head>
 
 <body>
@@ -143,178 +144,183 @@
 
   </div> <!-- Fin contenido principal -->
 
- 
-  <script>
-    // Loader y mostrar contenido después de 2.5s
-    window.addEventListener("load", () => {
+<script>
+  // Loader y mostrar contenido después de 2.5s
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      const loader = document.getElementById("loader");
+      const contenido = document.getElementById("contenido-principal");
+
+      loader.style.opacity = "0";
       setTimeout(() => {
-        const loader = document.getElementById("loader");
-        const contenido = document.getElementById("contenido-principal");
+        loader.style.display = "none";
+        contenido.style.display = "block";
+        document.body.style.overflow = "auto";
+        startBackgroundAnimation();
+      }, 500);
+    }, 2500);
+  });
 
-        loader.style.opacity = "0";
-        setTimeout(() => {
-          loader.style.display = "none";
-          contenido.style.display = "block";
-          document.body.style.overflow = "auto";
-          startBackgroundAnimation();
-        }, 500);
-      }, 2500);
+  const portraitImages = [
+    "https://image.tmdb.org/t/p/original/fhLZfsaeMfEiZeaYm66vQbzZmNk.jpg",
+    "https://image.tmdb.org/t/p/original/74Zc3NIX0ekBENEVEGmegedzuu8.jpg",
+    "https://image.tmdb.org/t/p/original/9G3Uv6WG8OuPSzBpZrgCVQ72EEX.jpg",
+    "https://image.tmdb.org/t/p/original/fQz9xeuvJfSm0rtnxSTT06lPx0Q.jpg"
+  ];
+
+  const landscapeImages = [
+    "https://image.tmdb.org/t/p/original/7HqLLVjdjhXS0Qoz1SgZofhkIpE.jpg",
+    "https://image.tmdb.org/t/p/original/veIyxxi5Gs8gvztLEW1Ysb8rrzs.jpg",
+    "https://image.tmdb.org/t/p/original/27ZkYMWynuK2qiDP6awc3MsCaOs.jpg",
+    "https://image.tmdb.org/t/p/original/j7KqDRzjbvIjDv7cdHz9G3ZYEQy.jpg"
+  ];
+
+  const backgroundImgs = document.querySelectorAll('.background-images img');
+  let currentImagesSet = portraitImages;
+  let currentIndex = 0;
+  let animationInterval;
+
+  function showImage(index) {
+    backgroundImgs.forEach((img, i) => {
+      img.classList.toggle('visible', i === index);
+      img.src = currentImagesSet[i];
     });
+  }
 
-    // Imágenes verticales y horizontales
-    const portraitImages = [
-      "https://image.tmdb.org/t/p/original/fhLZfsaeMfEiZeaYm66vQbzZmNk.jpg",
-      "https://image.tmdb.org/t/p/original/74Zc3NIX0ekBENEVEGmegedzuu8.jpg",
-      "https://image.tmdb.org/t/p/original/9G3Uv6WG8OuPSzBpZrgCVQ72EEX.jpg",
-      "https://image.tmdb.org/t/p/original/fQz9xeuvJfSm0rtnxSTT06lPx0Q.jpg"
-    ];
-
-    const landscapeImages = [
-      "https://image.tmdb.org/t/p/original/7HqLLVjdjhXS0Qoz1SgZofhkIpE.jpg",
-      "https://image.tmdb.org/t/p/original/veIyxxi5Gs8gvztLEW1Ysb8rrzs.jpg",
-      "https://image.tmdb.org/t/p/original/27ZkYMWynuK2qiDP6awc3MsCaOs.jpg",
-      "https://image.tmdb.org/t/p/original/j7KqDRzjbvIjDv7cdHz9G3ZYEQy.jpg"
-    ];
-
-    const backgroundImgs = document.querySelectorAll('.background-images img');
-    let currentImagesSet = portraitImages;  // Por defecto vertical
-    let currentIndex = 0;
-    let animationInterval;
-
-    function showImage(index) {
-      backgroundImgs.forEach((img, i) => {
-        img.classList.toggle('visible', i === index);
-        img.src = currentImagesSet[i];
-      });
-    }
-
-    function startBackgroundAnimation() {
-      currentIndex = 0;
+  function startBackgroundAnimation() {
+    currentIndex = 0;
+    showImage(currentIndex);
+    animationInterval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % backgroundImgs.length;
       showImage(currentIndex);
-      animationInterval = setInterval(() => {
-        currentIndex = (currentIndex + 1) % backgroundImgs.length;
-        showImage(currentIndex);
-      }, 5000);
-    }
+    }, 5000);
+  }
 
-    function changeImageSet(newSet) {
-      if (newSet === currentImagesSet) return;
-      currentImagesSet = newSet;
-      currentIndex = 0;
-      showImage(currentIndex);
-    }
+  function changeImageSet(newSet) {
+    if (newSet === currentImagesSet) return;
+    currentImagesSet = newSet;
+    currentIndex = 0;
+    showImage(currentIndex);
+  }
 
-    function handleOrientationChange() {
-      if (window.matchMedia("(orientation: landscape)").matches) {
-        changeImageSet(landscapeImages);
-      } else {
-        changeImageSet(portraitImages);
+  function handleOrientationChange() {
+    if (window.matchMedia("(orientation: landscape)").matches) {
+      changeImageSet(landscapeImages);
+    } else {
+      changeImageSet(portraitImages);
+    }
+  }
+
+  window.addEventListener("orientationchange", () => {
+    handleOrientationChange();
+  });
+
+  window.addEventListener("resize", () => {
+    handleOrientationChange();
+  });
+
+  window.addEventListener("load", () => {
+    handleOrientationChange();
+  });
+
+  document.getElementById('btn-compartir').addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const shareData = {
+      title: 'LzPlay Download',
+      text: '¡Mira esta app increíble para ver películas gratis! 📲🍿',
+      url: 'https://descargar.lzplay.lat/',
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        fallbackCopiarSimple();
       }
+    } else {
+      fallbackCopiarSimple();
     }
+  });
 
-    window.addEventListener("orientationchange", () => {
-      handleOrientationChange();
+  function fallbackCopiarSimple() {
+    const texto = 'https://descargar.lzplay.lat/';
+    navigator.clipboard.writeText(texto).then(() => {
+      mostrarMensajeCopiado();
     });
+  }
 
-    window.addEventListener("resize", () => {
-      handleOrientationChange();
-    });
+  function mostrarMensajeCopiado() {
+    const mensaje = document.createElement("div");
+    mensaje.innerHTML = `
+      <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">
+        🎉 ¡Enlace copiado con éxito! 📲
+      </div>
+      <div style="font-size: 14px; word-break: break-all; color: #222;">
+       https://lzrdrgz01.github.io/download-LzPlay/
+      </div>
+    `;
+    mensaje.style.position = "fixed";
+    mensaje.style.bottom = "30px";
+    mensaje.style.left = "50%";
+    mensaje.style.transform = "translateX(-50%)";
+    mensaje.style.background = "#facc15";
+    mensaje.style.color = "#000";
+    mensaje.style.padding = "15px 24px";
+    mensaje.style.borderRadius = "16px";
+    mensaje.style.fontWeight = "bold";
+    mensaje.style.zIndex = "10001";
+    mensaje.style.boxShadow = "0 0 12px rgba(0,0,0,0.6)";
+    mensaje.style.textAlign = "center";
+    mensaje.style.minWidth = "260px";
+    mensaje.style.userSelect = "none";
+    document.body.appendChild(mensaje);
 
-    window.addEventListener("load", () => {
-      handleOrientationChange();
-    });
+    setTimeout(() => {
+      mensaje.remove();
+    }, 3500);
+  }
 
-    document.getElementById('btn-compartir').addEventListener('click', async (e) => {
-      e.preventDefault();
+  const CONTRASENA_CORRECTA = "LzMovies"; // Cambia la contraseña
+  const USER_AGENT_APP = "LZPLAYAPP";     // Identificador exclusivo para tu app oficial
 
-      const shareData = {
-        title: 'LzPlay Download',
-        text: '¡Mira esta app increíble para ver películas gratis! 📲🍿',
-        url: 'https://lzrdrgz01.github.io/download-LzPlay/',
-      };
+  function esAndroid() {
+    return /Android/i.test(navigator.userAgent);
+  }
 
-      if (navigator.share) {
-        try {
-          await navigator.share(shareData);
-        } catch (err) {
-          fallbackCopiarSimple(); // Si hay error al compartir
-        }
-      } else {
-        fallbackCopiarSimple(); // WebView u otros navegadores no compatibles
-      }
-    });
+  function esIphone() {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
 
-    function fallbackCopiarSimple() {
-      const texto = 'https://lzrdrgz01.github.io/download-LzPlay/';
-      navigator.clipboard.writeText(texto).then(() => {
-        mostrarMensajeCopiado();
-      });
-    }
+  function esAppOficial() {
+    return navigator.userAgent.includes(USER_AGENT_APP);
+  }
 
-function mostrarMensajeCopiado() {
-  const mensaje = document.createElement("div");
-  mensaje.innerHTML = `
-    <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">
-      🎉 ¡Enlace copiado con éxito! 📲
-    </div>
-    <div style="font-size: 14px; word-break: break-all; color: #222;">
- https://lzrdrgz01.github.io/download-LzPlay/
-    </div>
-  `;
-  mensaje.style.position = "fixed";
-  mensaje.style.bottom = "30px";
-  mensaje.style.left = "50%";
-  mensaje.style.transform = "translateX(-50%)";
-  mensaje.style.background = "#facc15";
-  mensaje.style.color = "#000";
-  mensaje.style.padding = "15px 24px";
-  mensaje.style.borderRadius = "16px";
-  mensaje.style.fontWeight = "bold";
-  mensaje.style.zIndex = "10001";
-  mensaje.style.boxShadow = "0 0 12px rgba(0,0,0,0.6)";
-  mensaje.style.textAlign = "center";
-  mensaje.style.minWidth = "260px";
-  mensaje.style.userSelect = "none";
-  document.body.appendChild(mensaje);
+  document.getElementById("btn-entrar").addEventListener("click", (e) => {
+    e.preventDefault();
 
-  setTimeout(() => {
-    mensaje.remove();
-  }, 3500);
-}
-
-
-    function esAndroid() {
-      return /Android/i.test(navigator.userAgent);
-    }
-
-    function esIphone() {
-      return /iPhone/i.test(navigator.userAgent);
-    }
-
-    const CONTRASENA_CORRECTA = "LzMovies"; // Cambia la contraseña
-
-    document.getElementById("btn-entrar").addEventListener("click", (e) => {
-      e.preventDefault();
-
-      if (esIphone()) {
-        // iPhone: acceso directo sin token ni contraseña
-        window.location.href = "https://zinecia.github.io/Home/";
-      } else if (esAndroid()) {
-        // Android: generar token y redirigir
+    if (esAndroid()) {
+      if (esAppOficial()) {
         sessionStorage.setItem("lz_token", "acceso_valido");
         window.location.href = "https://zinecia.github.io/Home/";
       } else {
-        // PC: pedir contraseña
-        const pass = prompt("Por favor ingresa la contraseña para continuar:");
-
-        if (pass === CONTRASENA_CORRECTA) {
-          sessionStorage.setItem("lz_token", "acceso_valido");
-          window.location.href = "https://zinecia.github.io/Home/";
-        } else {
-          alert("Contraseña incorrecta, acceso denegado.");
-        }
+        alert("Debes usar la aplicación oficial de LzPlay para acceder.");
       }
-    });
-  </script>
+    } else if (esIphone()) {
+      sessionStorage.setItem("lz_token", "acceso_valido_iphone");
+      window.location.href = "https://zinecia.github.io/Home/";
+    } else {
+      const pass = prompt("Por favor ingresa la contraseña para continuar (solo administrador):");
+
+      if (pass === CONTRASENA_CORRECTA) {
+        sessionStorage.setItem("lz_token", "acceso_valido_admin");
+        window.location.href = "https://zinecia.github.io/Home/";
+      } else {
+        alert("Esta opción es solo para el administrador.");
+      }
+    }
+  });
+</script>
+
 </body>
 </html>
