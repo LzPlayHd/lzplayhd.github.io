@@ -332,14 +332,16 @@
     menu.classList.toggle("hidden");
   }
 
-  // Verificación Android fuera de app
-  window.addEventListener("DOMContentLoaded", () => {
-    if (/Android/i.test(navigator.userAgent) && !navigator.userAgent.includes("LZPLAYAPP")) {
-      document.getElementById("btn-entrar").classList.add("opacity-50", "cursor-not-allowed");
-      document.getElementById("btn-entrar").addEventListener("click", (e) => e.preventDefault());
-      document.getElementById("mensaje-android").classList.remove("hidden");
+  // Ocultar botón "Entrar" si es Android fuera de la app oficial
+window.addEventListener("DOMContentLoaded", () => {
+  var btnEntrar = document.getElementById("btn-entrar");
+  if (/Android/i.test(navigator.userAgent) && !navigator.userAgent.includes("LZPLAYAPP")) {
+    if (btnEntrar) {
+      btnEntrar.remove(); // Elimina el botón completamente
     }
-  });
+  }
+});
+
 </script>
 
 </body>
