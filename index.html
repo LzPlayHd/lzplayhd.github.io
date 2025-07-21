@@ -342,6 +342,17 @@
       }
     }
   });
+
+    window.addEventListener("load", () => {
+  // Detectar Android en navegador (no app oficial)
+  if (esAndroid() && !esAppOficial()) {
+    const btnEntrar = document.getElementById("btn-entrar");
+    if (btnEntrar) {
+      btnEntrar.style.display = "none";
+    }
+  }
+});
+
 </script>
 
 </body>
