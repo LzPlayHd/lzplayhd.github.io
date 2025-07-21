@@ -136,9 +136,15 @@
   Compartir
 </a>
 
-        <a href="https://linktr.ee/LzRdrg1" class="btn-lz">
-          Redes Sociales
-        </a>
+      <div class="relative">
+  <button class="btn-lz" onclick="toggleMenu()">Redes Sociales</button>
+  <div id="menu-redes" class="absolute mt-2 hidden bg-black text-white rounded-xl border border-yellow-400 shadow-xl p-2 z-50">
+    <a href="https://wa.me/?text=Visita%20LzPlay%20en%20www.lzplay.lat" target="_blank" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black rounded">WhatsApp</a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.lzplay.lat" target="_blank" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black rounded">Facebook</a>
+    <a href="https://twitter.com/intent/tweet?text=Visita%20LzPlay%20en%20www.lzplay.lat" target="_blank" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black rounded">Twitter (X)</a>
+    <a href="https://t.me/share/url?url=https://www.lzplay.lat" target="_blank" class="block px-4 py-2 hover:bg-yellow-500 hover:text-black rounded">Telegram</a>
+  </div>
+</div>
       </div>
     </div>
 
@@ -318,6 +324,20 @@
       } else {
         alert("Esta opción es solo para el administrador.");
       }
+    }
+  });
+
+   function toggleMenu() {
+    var menu = document.getElementById("menu-redes");
+    menu.classList.toggle("hidden");
+  }
+
+  // Verificación Android fuera de app
+  window.addEventListener("DOMContentLoaded", () => {
+    if (/Android/i.test(navigator.userAgent) && !navigator.userAgent.includes("LZPLAYAPP")) {
+      document.getElementById("btn-entrar").classList.add("opacity-50", "cursor-not-allowed");
+      document.getElementById("btn-entrar").addEventListener("click", (e) => e.preventDefault());
+      document.getElementById("mensaje-android").classList.remove("hidden");
     }
   });
 </script>
